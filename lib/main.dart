@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather/pages/home_page.dart';
 import 'package:weather/pages/mail_screen.dart';
 import 'package:weather/pages/pressure_screen.dart';
+import 'package:weather/pages/qrcode.dart';
 import 'package:weather/pages/report_screen.dart';
 import 'package:weather/pages/sensor_screen.dart';
 import 'package:weather/pages/settings_screen.dart';
@@ -14,7 +15,6 @@ import 'pages/table_screen.dart';
 import 'pages/humidity_screen.dart';
 import 'pages/infrared_screen.dart';
 import 'package:weather/pages/About_screen.dart';
-//mmmmmmmmm
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
         Support.routeName: (c) => Support(),
         Report.routeName: (c) => Report(),
         About.routeName: (c) => About(),
+        QRcode.routeName: (c) => QRcode(),
         Setting.routeName: (c) => Setting(),
       },
     );

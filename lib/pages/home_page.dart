@@ -12,6 +12,7 @@ import 'sensor_screen.dart';
 import 'tempreture_screen.dart';
 import 'table_screen.dart';
 import 'About_screen.dart';
+import 'qrcode.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = 'data page';
@@ -167,6 +168,19 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => About(),
+                      ));
+                },
+              ),
+              ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white,
+                leading: Icon(Icons.qr_code_scanner_rounded),
+                title: Text("QRcode"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QRcode(),
                       ));
                 },
               ),
