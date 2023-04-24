@@ -8,6 +8,7 @@ import 'infrared_screen.dart';
 import 'mail_screen.dart';
 import 'notification_screen.dart';
 import 'pressure_screen.dart';
+import 'profil.dart';
 import 'sensor_screen.dart';
 import 'tempreture_screen.dart';
 import 'table_screen.dart';
@@ -77,6 +78,19 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomePage(),
+                      ));
+                },
+              ),
+              ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white,
+                leading: Icon(Icons.account_circle_sharp),
+                title: Text("profil"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Profil(),
                       ));
                 },
               ),

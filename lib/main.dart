@@ -14,6 +14,7 @@ import 'pages/notification_screen.dart';
 import 'pages/table_screen.dart';
 import 'pages/humidity_screen.dart';
 import 'pages/infrared_screen.dart';
+import 'pages/profil.dart';
 import 'package:weather/pages/About_screen.dart';
 
 void main() {
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         SplashPage.routeName: (c) => SplashPage(),
         Tables.routeName: (c) => Tables(),
         HomePage.routeName: (c) => HomePage(),
+        Profil.routeName: (c) => Profil(),
         Tempreture.routeName: (c) => Tempreture(),
         Humidity.routeName: (c) => Humidity(),
         Pressure.routeName: (c) => Pressure(),
