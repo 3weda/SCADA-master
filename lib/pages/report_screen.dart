@@ -3,11 +3,12 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class Report extends StatefulWidget {
   static const String routeName = "report";
 
-  const Report({super.key});
+  const Report({Key? key}) : super(key: key);
 
   @override
   _ReportState createState() => _ReportState();
@@ -23,19 +24,28 @@ class _ReportState extends State<Report> {
     final value1 = double.tryParse(_value1Controller.text) ?? 0.0;
     final value2 = double.tryParse(_value2Controller.text) ?? 0.0;
 
+    // Load the font file
+    final fontData = await rootBundle.load('fonts/OpenSans-Regular.ttf');
+    final ttf = pw.Font.ttf(fontData);
+
+    // Create a TextStyle object with the custom font
+    final style = pw.TextStyle(font: ttf, fontSize: 12);
+
+    // Add a page to the PDF document with the text and custom font
     pdf.addPage(pw.Page(
       build: (pw.Context context) {
         return pw.Center(
-          child: pw.Text('Value 1: $value1\nValue 2: $value2'),
+          child: pw.Text('Value 1: $value1\nValue 2: $value2', style: style),
         );
       },
     ));
 
+    // Save the PDF document to a file
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/report.pdf');
     await file.writeAsBytes(await pdf.save());
 
-    // Share the PDF file via social networking
+    // Share the PDF file via social networking or any other means
     // ...
   }
 
