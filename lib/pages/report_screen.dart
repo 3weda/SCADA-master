@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Report extends StatefulWidget {
   static const String routeName = "report";
@@ -16,37 +16,71 @@ class Report extends StatefulWidget {
 
 class _ReportState extends State<Report> {
   final _formKey = GlobalKey<FormState>();
-  final _value1Controller = TextEditingController();
-  final _value2Controller = TextEditingController();
+  final _temperatureController = TextEditingController();
+  final _humidityController = TextEditingController();
+  final _gasController = TextEditingController();
+  final List<List<String>> _dataList = [];
 
-  Future<void> _generatePdf() async {
-    final pdf = pw.Document();
-    final value1 = double.tryParse(_value1Controller.text) ?? 0.0;
-    final value2 = double.tryParse(_value2Controller.text) ?? 0.0;
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
-    // Load the font file
-    final fontData = await rootBundle.load('fonts/OpenSans-Regular.ttf');
-    final ttf = pw.Font.ttf(fontData);
+  Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dataList = prefs.getStringList('dataList');
+    if (dataList != null) {
+      setState(() {
+        _dataList.addAll(dataList.map((data) => data.split(',')));
+      });
+    }
+  }
 
-    // Create a TextStyle object with the custom font
-    final style = pw.TextStyle(font: ttf, fontSize: 12);
+  Future<void> _saveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dataList = _dataList.map((data) => data.join(',')).toList();
+    await prefs.setStringList('dataList', dataList);
+  }
 
-    // Add a page to the PDF document with the text and custom font
-    pdf.addPage(pw.Page(
-      build: (pw.Context context) {
-        return pw.Center(
-          child: pw.Text('Value 1: $value1\nValue 2: $value2', style: style),
-        );
-      },
-    ));
+  Future<void> _addValuesToList() async {
+    final temperature = _temperatureController.text;
+    final humidity = _humidityController.text;
+    final gas = _gasController.text;
 
-    // Save the PDF document to a file
+    setState(() {
+      _dataList.add([temperature, humidity, gas]);
+    });
+
+    _temperatureController.clear();
+    _humidityController.clear();
+    _gasController.clear();
+
+    await _saveData();
+  }
+
+  Future<String> _exportDataToCsv() async {
+    final csvData = const ListToCsvConverter().convert([
+      ['Temperature', 'Humidity', 'Gas'],
+      ..._dataList,
+    ]);
     final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/report.pdf');
-    await file.writeAsBytes(await pdf.save());
+    final filePath = '${directory.path}/data.csv';
+    final file = File(filePath);
+    await file.writeAsString(csvData);
+    return filePath;
+  }
 
-    // Share the PDF file via social networking or any other means
-    // ...
+  Future<void> _shareCsvFile() async {
+    final filePath = await _exportDataToCsv();
+    await Share.shareFiles([filePath], text: 'CSV file');
+  }
+
+  Future<void> _clearData() async {
+    setState(() {
+      _dataList.clear();
+    });
+    await _saveData();
   }
 
   @override
@@ -63,52 +97,105 @@ class _ReportState extends State<Report> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _value1Controller,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Value 1',
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _temperatureController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Temperature',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a value';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a value';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: _value2Controller,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Value 2',
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _humidityController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Humidity',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a value';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a value';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _generatePdf();
-                  }
-                },
-                child: Text('Generate PDF'),
-              ),
-            ],
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _gasController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Gas',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a value';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _addValuesToList();
+                    }
+                  },
+                  child: Text('Add Values to List'),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _exportDataToCsv();
+                  },
+                  child: Text('Exported List Data to CSV file'),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _shareCsvFile();
+                  },
+                  child: Text('Share CSV file'),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _clearData();
+                  },
+                  child: Text('Clear Data'),
+                ),
+                SizedBox(height: 16.0),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _dataList.length,
+                  itemBuilder: (context, index) {
+                    final data = _dataList[index];
+                    return ListTile(
+                      title: Text('Temperature: ${data[0]}'),
+                      subtitle: Text('Humidity: ${data[1]}, Gas: ${data[2]}'),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

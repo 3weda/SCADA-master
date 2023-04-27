@@ -18,18 +18,18 @@ class QRcode extends StatelessWidget {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (ctx) => ScanScreen()));
-                print('scanqrsensor');
-              },
-              child: Text('scanqrsensor'))
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) => ScanScreen()));
+                    print('scanqrsensor');
+                  },
+                  child: Text('scanqrsensor'))
+            ],
+          )),
     );
   }
 }
