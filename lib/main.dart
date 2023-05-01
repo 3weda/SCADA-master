@@ -15,6 +15,10 @@ import 'pages/table_screen.dart';
 import 'pages/humidity_screen.dart';
 import 'pages/infrared_screen.dart';
 import 'pages/profil.dart';
+import 'pages/LoginPage.dart';
+import 'pages/IntroductionScreen.dart';
+import 'pages/nav_but.dart';
+
 import 'package:weather/pages/About_screen.dart';
 
 void main() {
@@ -36,7 +40,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: SplashPage.routeName,
       routes: {
+        SCADAIntroduction.routeName: (c) => SCADAIntroduction(),
         SplashPage.routeName: (c) => SplashPage(),
+        LoginPage.routeName: (c) => LoginPage(),
+        NavHome.routeName: (c) => NavHome(),
         Tables.routeName: (c) => Tables(),
         HomePage.routeName: (c) => HomePage(),
         Profil.routeName: (c) => Profil(),

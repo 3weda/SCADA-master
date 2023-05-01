@@ -1,10 +1,11 @@
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:weather/pages/IntroductionScreen.dart';
 
 import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
- static const String routeName="splash";
+  static const String routeName = "splash";
 
   const SplashPage({super.key});
 
@@ -27,11 +28,13 @@ class _SplashPageState extends State<SplashPage> {
       ),
       backgroundColor: Colors.blue.shade600,
       showLoader: true,
-      loadingText: Text("Loading...",style: TextStyle(
-        color: Colors.white,
-        fontSize: 26,
-        fontWeight: FontWeight.bold,)),
-      navigator: HomePage(),
+      loadingText: Text("Loading...",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          )),
+      navigator: SCADAIntroduction(),
       durationInSeconds: 5,
     );
   }

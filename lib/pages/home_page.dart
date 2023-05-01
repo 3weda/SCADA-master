@@ -14,6 +14,7 @@ import 'tempreture_screen.dart';
 import 'table_screen.dart';
 import 'About_screen.dart';
 import 'qrcode.dart';
+import 'package:weather/pages/nav_but.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = 'data page';
@@ -24,38 +25,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedTab = 2;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            currentIndex: 2,
-            backgroundColor: Colors.cyanAccent,
-            onTap: (index) {
-              print(index);
-            },
-            items: [
-              BottomNavigationBarItem(
-                  label: "acount",
-                  icon: Icon(
-                    Icons.account_box,
-                    color: Colors.deepPurpleAccent,
-                  )),
-              BottomNavigationBarItem(
-                  label: "QR",
-                  icon: Icon(
-                    Icons.qr_code_scanner_sharp,
-                    color: Colors.deepPurpleAccent,
-                  )),
-              BottomNavigationBarItem(
-                  label: "table",
-                  icon: Icon(
-                    Icons.table_chart_outlined,
-                    color: Colors.deepPurpleAccent,
-                  )),
-            ]),
         backgroundColor: Color.fromRGBO(36, 50, 94, 1.0),
         appBar: AppBar(
           centerTitle: true,
