@@ -15,6 +15,7 @@ import 'table_screen.dart';
 import 'About_screen.dart';
 import 'qrcode.dart';
 import 'package:weather/pages/nav_but.dart';
+import 'note_screen.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = 'data page';
@@ -104,6 +105,19 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Mail(),
+                      ));
+                },
+              ),
+              ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white,
+                leading: Icon(Icons.note_add),
+                title: Text("Note"),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Note(),
                       ));
                 },
               ),

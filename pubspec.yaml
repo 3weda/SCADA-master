@@ -58,6 +58,10 @@ dependencies:
   qr_code_scanner: ^1.0.1
   ff_navigation_bar_plus: ^0.1.5
   image_picker: ^0.8.7+4
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.8
+  firebase_auth: ^4.4.2
+  syncfusion_flutter_gauges: ^21.2.3
 flutter_native_splash:
   image: assets/images/splash.png
   color: "#42a5f5"

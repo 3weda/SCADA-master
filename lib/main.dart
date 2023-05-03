@@ -18,6 +18,7 @@ import 'pages/profil.dart';
 import 'pages/LoginPage.dart';
 import 'pages/IntroductionScreen.dart';
 import 'pages/nav_but.dart';
+import 'pages/note_screen.dart';
 
 import 'package:weather/pages/About_screen.dart';
 
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         Sensor.routeName: (c) => Sensor(),
         Mail.routeName: (c) => Mail(),
         Notifications.routeName: (c) => Notifications(),
+        Note.routeName: (c) => Note(),
         Support.routeName: (c) => Support(),
         Report.routeName: (c) => Report(),
         About.routeName: (c) => About(),

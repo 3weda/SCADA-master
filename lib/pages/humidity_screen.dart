@@ -62,7 +62,7 @@ class _HumidityState extends State<Humidity> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => hum_details(index),
+                    builder: (context) => hum_details(),
                   ),
                 );
               },

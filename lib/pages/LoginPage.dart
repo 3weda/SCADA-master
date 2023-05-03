@@ -14,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 16.0),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         hintText: "Password",
                         filled: true,
@@ -91,6 +92,18 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         prefixIcon: Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {

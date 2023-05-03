@@ -1,10 +1,12 @@
-// ignore_for_file: avoid_print
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:weather/pages/hum_details.dart';
+import 'package:weather/pages/pressure_screen.dart';
+import 'package:weather/pages/temp_details.dart';
 
-//ignore: must_be_immutable
 class ScanScreen extends StatefulWidget {
   const ScanScreen({Key? key}) : super(key: key);
 
@@ -66,7 +68,7 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 
-  void scanQRCode() async {
+  Future<void> scanQRCode() async {
     try {
       final qrCode = await FlutterBarcodeScanner.scanBarcode(
         '#ff6666',
@@ -82,8 +84,61 @@ class _ScanScreenState extends State<ScanScreen> {
         "QRCode_Result:--",
       );
       print(qrCode);
+      _showOptionsDialog();
     } on PlatformException {
       getResult = 'Failed to scan QR Code.';
     }
+  }
+
+  void _showOptionsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select an option'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => temp_details(),
+                      ),
+                    );
+                  },
+                  child: const Text('Temperature'),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => hum_details(),
+                      ),
+                    );
+                  },
+                  child: const Text('Humidity'),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Pressure(),
+                      ),
+                    );
+                  },
+                  child: const Text('Pressure'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

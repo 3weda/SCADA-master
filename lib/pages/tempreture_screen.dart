@@ -62,7 +62,7 @@ class _TempretureState extends State<Tempreture> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => temp_details(index),
+                    builder: (context) => temp_details(),
                   ),
                 );
               },

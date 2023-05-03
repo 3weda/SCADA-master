@@ -10,25 +10,32 @@ class Profil extends StatefulWidget {
   const Profil({Key? key}) : super(key: key);
 
   @override
-  _ProfilState createState() => _ProfilState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _ProfilState extends State<Profil> {
+class _ProfileState extends State<Profil> {
   String _name = "John Doe";
   String _email = "johndoe@example.com";
   String _phone = "+1 123-456-7890";
-  String _photoUrl = "assets/images/profile_picture.png";
   String _job = "Supervisor in the SCADA project";
   String _qualification = "Bachelor's degree in Electrical Engineering";
   TextEditingController nameController = TextEditingController();
   final picker = ImagePicker();
   late File _image;
-  pickGalleryImage() async {
-    var image = await picker.pickImage(source: ImageSource.gallery);
-    if (image == null) return null;
-    setState(() {
-      _image = File(image.path);
-    });
+
+  @override
+  void initState() {
+    super.initState();
+    _image = File('assets/images/profile_picture.png');
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
   }
 
   void _editName() async {
@@ -67,36 +74,6 @@ class _ProfilState extends State<Profil> {
     }
   }
 
-  void _editPhoto() async {
-    String? newPhotoUrl = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Edit Photo"),
-        content: TextField(
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: "Enter new photo URL",
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, _photoUrl),
-            child: Text("Save"),
-          ),
-        ],
-      ),
-    );
-    if (newPhotoUrl != null) {
-      setState(() {
-        _photoUrl = newPhotoUrl;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +82,7 @@ class _ProfilState extends State<Profil> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text("Profil"),
+        title: Text("Profile"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,7 +90,7 @@ class _ProfilState extends State<Profil> {
           SizedBox(height: 16.0),
           CircleAvatar(
             radius: 64.0,
-            backgroundImage: AssetImage(_image.path),
+            backgroundImage: AssetImage('assets/images/profile_picture.png'),
           ),
           SizedBox(height: 16.0),
           GestureDetector(
@@ -128,62 +105,93 @@ class _ProfilState extends State<Profil> {
             ),
           ),
           SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Table(
+            columnWidths: {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(4),
+            },
             children: [
-              Icon(Icons.email, color: Colors.white),
-              SizedBox(width: 8.0),
-              GestureDetector(
-                onTap: () => launch("mailto:$_email"),
-                child: Text(
-                  _email,
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
+              TableRow(
+                children: [
+                  Icon(Icons.email, color: Colors.white),
+                  GestureDetector(
+                    onTap: () => launch("mailto:$_email"),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Text(
+                        _email,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.phone, color: Colors.white),
-              SizedBox(width: 8.0),
-              GestureDetector(
-                onTap: () => launch("tel:$_phone"),
-                child: Text(
-                  _phone,
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
+              TableRow(
+                children: [
+                  Icon(Icons.phone, color: Colors.white),
+                  GestureDetector(
+                    onTap: () => launch("tel:$_phone"),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Text(
+                        _phone,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.work, color: Colors.white),
-              SizedBox(width: 8.0),
-              Text(
-                _job,
-                style: TextStyle(color: Colors.white),
+              TableRow(
+                children: [
+                  Icon(Icons.work, color: Colors.white),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      _job,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.school, color: Colors.white),
-              SizedBox(width: 8.0),
-              Text(
-                _qualification,
-                style: TextStyle(color: Colors.white),
+              TableRow(
+                children: [
+                  Icon(Icons.school, color: Colors.white),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      _qualification,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
