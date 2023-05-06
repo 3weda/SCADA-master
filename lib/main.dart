@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:weather/firebase_options.dart';
+import 'package:weather/pages/RegisterPage.dart';
 import 'package:weather/pages/home_page.dart';
 import 'package:weather/pages/mail_screen.dart';
 import 'package:weather/pages/pressure_screen.dart';
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: SplashPage.routeName,
+      home: const AppView(),
       routes: {
         SCADAIntroduction.routeName: (c) => SCADAIntroduction(),
         SplashPage.routeName: (c) => SplashPage(),
@@ -62,6 +66,27 @@ class MyApp extends StatelessWidget {
         About.routeName: (c) => About(),
         QRcode.routeName: (c) => QRcode(),
         Setting.routeName: (c) => Setting(),
+        RegisterPage.routeName: (c) => RegisterPage(),
+      },
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            return const SplashPage();
+          default:
+            return const SplashPage();
+        }
       },
     );
   }

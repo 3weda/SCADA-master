@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Report extends StatefulWidget {
   static const String routeName = "report";
@@ -47,9 +48,12 @@ class _ReportState extends State<Report> {
     final temperature = _temperatureController.text;
     final humidity = _humidityController.text;
     final gas = _gasController.text;
+    final now = DateTime.now();
+    final formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    final formattedTime = DateFormat('HH:mm:ss').format(now);
 
     setState(() {
-      _dataList.add([temperature, humidity, gas]);
+      _dataList.add([temperature, humidity, gas, formattedDate, formattedTime]);
     });
 
     _temperatureController.clear();
@@ -61,7 +65,7 @@ class _ReportState extends State<Report> {
 
   Future<String> _exportDataToCsv() async {
     final csvData = const ListToCsvConverter().convert([
-      ['Temperature', 'Humidity', 'Gas'],
+      ['Temperature', 'Humidity', 'Gas', 'Date', 'Time'],
       ..._dataList,
     ]);
     final directory = await getApplicationDocumentsDirectory();
@@ -158,7 +162,7 @@ class _ReportState extends State<Report> {
                       _addValuesToList();
                     }
                   },
-                  child: Text('Add Values to List'),
+                  child: Text('AddValues to List'),
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
@@ -182,15 +186,106 @@ class _ReportState extends State<Report> {
                   child: Text('Clear Data'),
                 ),
                 SizedBox(height: 16.0),
+                Text(
+                  'Reading',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Temperature',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Humidity',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Gas',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Date',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Time',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.0),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: _dataList.length,
                   itemBuilder: (context, index) {
                     final data = _dataList[index];
-                    return ListTile(
-                      title: Text('Temperature: ${data[0]}'),
-                      subtitle: Text('Humidity: ${data[1]}, Gas: ${data[2]}'),
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${data[0]}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '${data[1]}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '${data[2]}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '${data[3]}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '${data[4]}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),

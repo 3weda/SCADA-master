@@ -1,33 +1,41 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:weather/pages/RegisterPage.dart';
-import 'package:weather/pages/nav_but.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:weather/pages/LoginPage.dart';
 
-import 'splash_screen.dart';
+class RegisterPage extends StatefulWidget {
+  static const String routeName = "RegisterPage";
 
-class LoginPage extends StatefulWidget {
-  static const String routeName = "LoginPage";
+  const RegisterPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confrimPasswordController = TextEditingController();
+  final _userNameController = TextEditingController();
   bool _obscurePassword = true;
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
+      String confirmPassoword = _confrimPasswordController.text;
       try {
+        if (password != confirmPassoword) {
+          print("password and confrim password isn't the same");
+          return;
+        }
         await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+            .createUserWithEmailAndPassword(email: email, password: password);
         print('user credential');
         Navigator.pushNamedAndRemoveUntil(
-            context, NavHome.routeName, (route) => false);
+            context, LoginPage.routeName, (route) => false);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           print('weak password');
@@ -51,8 +59,8 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        title: Text("Login"),
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+        title: Text("Sign Up"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -70,6 +78,29 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    TextFormField(
+                      controller: _userNameController,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        hintText: "User Name",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        prefixIcon: Icon(Icons.person),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter your email";
+                        }
+                        if (!value.contains("@")) {
+                          return "Please enter a valid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -121,29 +152,63 @@ class _LoginPageState extends State<LoginPage> {
                         if (value!.isEmpty) {
                           return "Please enter your password";
                         }
-
+                        if (value.length < 3) {
+                          return "Password must be at least 3 characters";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _confrimPasswordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        hintText: "Confirm Password",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        prefixIcon: Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter Confrim password";
+                        }
                         return null;
                       },
                     ),
                     SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: _submit,
-                      child: Text("Login"),
+                      child: Text("Sign Up"),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          "Don't have a acount?",
+                          "Already have a account",
                           style: TextStyle(color: Colors.white),
                         ),
                         TextButton(
                             onPressed: () {
                               Navigator.pushNamedAndRemoveUntil(context,
-                                  RegisterPage.routeName, (route) => false);
+                                  LoginPage.routeName, (route) => false);
                             },
-                            child: const Text("Register"))
+                            child: const Text("Log in"))
                       ],
                     ),
                   ],

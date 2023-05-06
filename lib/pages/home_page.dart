@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:weather/pages/LoginPage.dart';
 import 'package:weather/pages/report_screen.dart';
 import 'package:weather/pages/settings_screen.dart';
 import 'package:weather/pages/support_screen.dart';
@@ -26,6 +28,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late User? user;
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -42,7 +51,42 @@ class _HomePageState extends State<HomePage> {
           width: MediaQuery.of(context).size.width * .5,
           backgroundColor: Color.fromRGBO(36, 50, 94, 1.0),
           child: ListView(
-            children: [
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.white10,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'John Doe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      '${user?.email}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               ListTile(
                 textColor: Colors.white,
                 iconColor: Colors.white,
@@ -197,6 +241,17 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                         builder: (context) => Support(),
                       ));
+                },
+              ),
+              ListTile(
+                textColor: Colors.white,
+                iconColor: Colors.white,
+                leading: Icon(Icons.exit_to_app),
+                title: Text("sign out"),
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      LoginPage.routeName, (route) => false);
                 },
               ),
             ],

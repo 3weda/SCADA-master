@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:weather/pages/home_page.dart';
+import 'package:weather/pages/nav_but.dart';
 
 import 'LoginPage.dart';
 
@@ -34,10 +37,10 @@ class _SCADAIntroductionState extends State<SCADAIntroduction> {
   int _currentIndex = 0;
 
   void _goToLogin(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
+    final user = FirebaseAuth.instance.currentUser;
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        user == null ? LoginPage.routeName : NavHome.routeName,
+        (route) => false);
   }
 
   @override

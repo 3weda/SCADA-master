@@ -2,201 +2,183 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Profil extends StatefulWidget {
-  static const String routeName = "profil";
-
-  const Profil({Key? key}) : super(key: key);
+  static const String routeName = "Profil";
+  const Profil({super.key});
 
   @override
-  _ProfileState createState() => _ProfileState();
+  State<Profil> createState() => _ProfilState();
 }
 
-class _ProfileState extends State<Profil> {
-  String _name = "John Doe";
-  String _email = "johndoe@example.com";
-  String _phone = "+1 123-456-7890";
-  String _job = "Supervisor in the SCADA project";
-  String _qualification = "Bachelor's degree in Electrical Engineering";
-  TextEditingController nameController = TextEditingController();
-  final picker = ImagePicker();
-  late File _image;
+class _ProfilState extends State<Profil> {
+  var picker = ImagePicker();
+  late File _image = File("");
 
-  @override
-  void initState() {
-    super.initState();
-    _image = File('assets/images/profile_picture.png');
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  void _editName() async {
-    String? newName = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Edit Name"),
-        content: TextField(
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: "Enter new name",
-          ),
-          controller: nameController,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _name = nameController.text;
-              });
-              Navigator.pop(context, _name);
-            },
-            child: Text("Save"),
-          ),
-        ],
-      ),
-    );
-    if (newName != null) {
-      setState(() {
-        _name = newName;
-      });
-    }
+  pickGalleryImage() async {
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    if (image == null) return null;
+    setState(() {
+      _image = File(image.path);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(36, 50, 94, 1.0),
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        title: Text("Profile"),
+        elevation: 0.0,
+        backgroundColor: Color(0xff555555),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {},
+        ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
+        alignment: Alignment.center,
         children: [
-          SizedBox(height: 16.0),
-          CircleAvatar(
-            radius: 64.0,
-            backgroundImage: AssetImage('assets/images/profile_picture.png'),
-          ),
-          SizedBox(height: 16.0),
-          GestureDetector(
-            onTap: _editName,
-            child: Text(
-              _name,
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(height: 16.0),
-          Table(
-            columnWidths: {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(4),
-            },
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TableRow(
-                children: [
-                  Icon(Icons.email, color: Colors.white),
-                  GestureDetector(
-                    onTap: () => launch("mailto:$_email"),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(
-                        _email,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+              Container(
+                height: 450,
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    textfield(
+                      hintText: 'Username',
+                    ),
+                    textfield(
+                      hintText: 'Email',
+                    ),
+                    textfield(
+                      hintText: 'Password',
+                    ),
+                    textfield(
+                      hintText: 'Confirm password',
+                    ),
+                    Container(
+                      height: 55,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        // color: Colors.black54,
+                        child: Center(
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                              fontSize: 23,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+          CustomPaint(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+            painter: HeaderCurvedContainer(),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  "Profile",
+                  style: TextStyle(
+                    fontSize: 35,
+                    letterSpacing: 1.5,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
+                ),
               ),
-              TableRow(
-                children: [
-                  Icon(Icons.phone, color: Colors.white),
-                  GestureDetector(
-                    onTap: () => launch("tel:$_phone"),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(
-                        _phone,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.width / 2,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 5),
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: _image.path == ""
+                        ? AssetImage('assets/images/profile_picture.png')
+                        : FileImage(_image) as ImageProvider,
                   ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Icon(Icons.work, color: Colors.white),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(
-                      _job,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: [
-                  Icon(Icons.school, color: Colors.white),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(
-                      _qualification,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 270, left: 184),
+            child: CircleAvatar(
+              backgroundColor: Colors.black54,
+              child: IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                onPressed: pickGalleryImage,
+              ),
+            ),
+          )
         ],
       ),
     );
   }
+
+  Widget textfield({@required hintText}) {
+    return Material(
+      elevation: 4,
+      shadowColor: Colors.grey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(
+              letterSpacing: 2,
+              color: Colors.black54,
+              fontWeight: FontWeight.bold,
+            ),
+            fillColor: Colors.white30,
+            filled: true,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none)),
+      ),
+    );
+  }
+}
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = Color(0xff555555);
+    Path path = Path()
+      ..relativeLineTo(0, 150)
+      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
+      ..relativeLineTo(0, -150)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

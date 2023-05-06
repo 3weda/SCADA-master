@@ -46,7 +46,7 @@ class _ChartsState extends State<temp_details> {
     );
   }
 
-  double value = 120.0;
+  double value = 90.0;
   Widget radialGauge() {
     return SfRadialGauge(
       axes: <RadialAxis>[
