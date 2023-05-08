@@ -90,15 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         prefixIcon: Icon(Icons.person),
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please enter your email";
-                        }
-                        if (!value.contains("@")) {
-                          return "Please enter a valid email";
-                        }
-                        return null;
-                      },
+                      validator: (value) {},
                     ),
                     SizedBox(height: 16.0),
                     TextFormField(
