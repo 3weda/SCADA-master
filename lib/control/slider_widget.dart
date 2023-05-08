@@ -80,7 +80,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                 innerWidget: (percentage) {
                   return Center(
                     child: Text(
-                      '${percentage?.toInt()}°c',
+                      '${percentage.toInt()}°c',
                       style: TextStyle(
                         fontSize: 50,
                       ),

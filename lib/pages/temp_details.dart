@@ -120,7 +120,7 @@ class _ChartsState extends State<temp_details> {
         primaryYAxis: NumericAxis(
             axisLine: const AxisLine(width: 0),
             majorTickLines: const MajorTickLines(size: 0),
-            title: AxisTitle(text: 'Internet speed (Mbps)')));
+            title: AxisTitle(text: 'Tempreture')));
   }
 
   int time = 19;
