@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:weather/firebase_options.dart';
 import 'package:weather/pages/RegisterPage.dart';
+import 'package:weather/pages/control.dart';
 import 'package:weather/pages/home_page.dart';
 import 'package:weather/pages/mail_screen.dart';
 import 'package:weather/pages/pressure_screen.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         QRcode.routeName: (c) => QRcode(),
         Setting.routeName: (c) => Setting(),
         RegisterPage.routeName: (c) => RegisterPage(),
+        Control.routeName: (c) => Control(),
       },
     );
   }

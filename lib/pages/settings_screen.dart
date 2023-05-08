@@ -158,7 +158,7 @@ class _SettingsPageState extends State<Setting> {
             debugShowCheckedModeBanner: false,
             home: CupertinoPageScaffold(
               navigationBar: const CupertinoNavigationBar(
-                backgroundColor: Color.fromARGB(255, 48, 131, 255),
+                backgroundColor: Color.fromRGBO(36, 50, 94, 1.0),
                 middle: Text("Settings UI"),
               ),
               child: Container(
@@ -377,7 +377,7 @@ class _SettingsPageState extends State<Setting> {
                                 CupertinoSwitch(
                                     value: lockAppSwitchVal,
                                     activeColor:
-                                        Color.fromARGB(255, 48, 131, 255),
+                                        Color.fromRGBO(36, 50, 94, 1.0),
                                     onChanged: (val) {
                                       setState(() {
                                         lockAppSwitchVal = val;
@@ -435,8 +435,7 @@ class _SettingsPageState extends State<Setting> {
                                 const Spacer(),
                                 CupertinoSwitch(
                                   value: changePassSwitchVal,
-                                  activeColor:
-                                      Color.fromARGB(255, 48, 131, 255),
+                                  activeColor: Color.fromRGBO(36, 50, 94, 1.0),
                                   onChanged: (val) {
                                     setState(() {
                                       changePassSwitchVal = val;

@@ -5,6 +5,7 @@ import 'package:csv/csv.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:weather/pages/nav_menu.dart';
 
 class Report extends StatefulWidget {
   static const String routeName = "report";
@@ -97,6 +98,7 @@ class _ReportState extends State<Report> {
         backgroundColor: Colors.transparent,
         title: Text("Report"),
       ),
+      drawer: NavMenu(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

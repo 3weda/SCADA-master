@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/pages/control.dart';
 import 'package:weather/pages/home_page.dart';
 import 'package:weather/pages/qrcode.dart';
 import 'package:weather/pages/table_screen.dart';
@@ -32,9 +33,11 @@ class _NavHomeState extends State<NavHome> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromRGBO(36, 50, 94, 1.0),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, Control.routeName);
+        },
         child: Icon(
-          Icons.camera_alt,
+          Icons.control_camera,
           size: 36,
         ),
       ),

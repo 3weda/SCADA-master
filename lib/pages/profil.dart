@@ -51,16 +51,16 @@ class _ProfilState extends State<Profil> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     textfield(
-                      hintText: 'Username',
+                      hintText: 'Mohammed',
                     ),
                     textfield(
-                      hintText: 'Email',
+                      hintText: 'Moh@gmail.com',
                     ),
                     textfield(
-                      hintText: 'Password',
+                      hintText: 'Supervisor',
                     ),
                     textfield(
-                      hintText: 'Confirm password',
+                      hintText: 'Zagazig , Egypt',
                     ),
                     Container(
                       height: 55,

@@ -63,6 +63,7 @@ dependencies:
   firebase_auth: ^4.4.2
   syncfusion_flutter_gauges: ^21.2.3
   firebase_core: ^2.11.0
+  sleek_circular_slider: ^2.0.1
 flutter_native_splash:
   image: assets/images/splash.png
   color: "#42a5f5"
